@@ -1,0 +1,45 @@
+{% extends 'quotes/base.html' %}
+
+{% block title %}Ajouter une Citation{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1>Ajouter une Nouvelle Citation</h1>
+        <p>Partagez une citation inspirante avec la communauté</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="form-container">
+        <form method="post" class="quote-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="{{ form.text.id_for_label }}" class="form-label">
+                    Citation *
+                </label>
+                {{ form.text }}
+                {% if form.text.errors %}
+                <div class="form-error">{{ form.text.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.author.id_for_label }}" class="form-label">
+                    Auteur *
+                </label>
+                {{ form.author }}
+                {% if form.author.errors %}
+                <div class="form-error">{{ form.author.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-actions">
+                <a href="{% url 'quote_list' %}" class="btn-secondary">Annuler</a>
+                <button type="submit" class="btn-primary">✨ Ajouter la citation</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

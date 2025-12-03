@@ -1,0 +1,39 @@
+{% extends 'quotes/base.html' %}
+
+{% block title %}Accueil - Citations Inspirantes{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <div class="container">
+        <h1 class="hero-title">Découvrez des Citations Inspirantes</h1>
+        <p class="hero-subtitle">Une collection de sagesse et d'inspiration</p>
+
+        {% if random_quote %}
+        <div class="quote-card featured">
+            <div class="quote-icon">❝</div>
+            <blockquote class="quote-text">{{ random_quote.text }}</blockquote>
+            <div class="quote-author">— {{ random_quote.author }}</div>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">📭</div>
+            <h3>Aucune citation pour le moment</h3>
+            <p>Soyez le premier à ajouter une citation inspirante !</p>
+            <a href="{% url 'quote_create' %}" class="btn-primary">Ajouter une citation</a>
+        </div>
+        {% endif %}
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">{{ total_quotes }}</div>
+                <div class="stat-label">Citation{{ total_quotes|pluralize }}</div>
+            </div>
+        </div>
+
+        <div class="cta-buttons">
+            <a href="{% url 'quote_list' %}" class="btn-secondary">Voir toutes les citations</a>
+            <a href="{% url 'quote_create' %}" class="btn-primary">Ajouter une citation</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'quotes/base.html' %}
+
+{% block title %}Toutes les Citations{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1>Toutes les Citations</h1>
+        <p>{{ total_quotes }} citation{{ total_quotes|pluralize }} dans notre collection</p>
+    </div>
+</div>
+
+<div class="container">
+    {% if page_obj %}
+    <div class="quotes-grid">
+        {% for quote in page_obj %}
+        <div class="quote-card">
+            <div class="quote-icon-small">❝</div>
+            <blockquote class="quote-text-small">{{ quote.text }}</blockquote>
+            <div class="quote-footer">
+                <div class="quote-author-small">— {{ quote.author }}</div>
+                <form method="post" action="{% url 'quote_delete' quote.pk %}" class="delete-form">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-delete"
+                        onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette citation ?')">
+                        🗑️
+                    </button>
+                </form>
+            </div>
+            <div class="quote-date">{{ quote.created_at|date:"d M Y" }}</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+        <a href="?page=1" class="page-link">« Première</a>
+        <a href="?page={{ page_obj.previous_page_number }}" class="page-link">‹ Précédente</a>
+        {% endif %}
+
+        <span class="page-current">
+            Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="page-link">Suivante ›</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link">Dernière »</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <h3>Aucune citation pour le moment</h3>
+        <p>Commencez par ajouter votre première citation !</p>
+        <a href="{% url 'quote_create' %}" class="btn-primary">Ajouter une citation</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

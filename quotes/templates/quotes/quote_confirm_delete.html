@@ -1,0 +1,34 @@
+{% extends 'quotes/base.html' %}
+
+{% block title %}Supprimer la Citation{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1>Confirmer la Suppression</h1>
+    </div>
+</div>
+
+<div class="container">
+    <div class="confirm-delete">
+        <div class="warning-icon">⚠️</div>
+        <h2>Êtes-vous sûr de vouloir supprimer cette citation ?</h2>
+
+        <div class="quote-card">
+            <div class="quote-icon-small">❝</div>
+            <blockquote class="quote-text-small">{{ quote.text }}</blockquote>
+            <div class="quote-author-small">— {{ quote.author }}</div>
+        </div>
+
+        <p class="warning-text">Cette action est irréversible.</p>
+
+        <form method="post" class="delete-confirm-form">
+            {% csrf_token %}
+            <div class="form-actions">
+                <a href="{% url 'quote_list' %}" class="btn-secondary">Annuler</a>
+                <button type="submit" class="btn-danger">🗑️ Supprimer définitivement</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

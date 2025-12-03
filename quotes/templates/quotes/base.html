@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Gestionnaire de Citations{% endblock %}</title>
+    <meta name="description" content="Découvrez et partagez des citations inspirantes">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'quotes/css/style.css' %}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="{% url 'home' %}" class="logo">
+                <span class="logo-icon">💭</span>
+                <span class="logo-text">QuoteVault</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Accueil</a></li>
+                <li><a href="{% url 'quote_list' %}" class="nav-link {% if request.resolver_match.url_name == 'quote_list' %}active{% endif %}">Toutes les citations</a></li>
+                <li><a href="{% url 'quote_create' %}" class="btn-primary">+ Ajouter</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Messages Flash -->
+    {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Contenu principal -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 QuoteVault. Déployé avec Django + Nginx + Gunicorn 🚀</p>
+        </div>
+    </footer>
+
+    <script>
+        // Auto-hide messages after 5 seconds
+        setTimeout(() => {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                alert.style.animation = 'slideOut 0.3s ease-out forwards';
+                setTimeout(() => alert.remove(), 300);
+            });
+        }, 5000);
+    </script>
+</body>
+</html>
