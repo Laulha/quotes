@@ -31,3 +31,6 @@ Thumbs.db
 # Settings
 config/settings/settings_production.py
 
+# ── Django migrations ─────────────────────────────────────
+**/migrations/
+
