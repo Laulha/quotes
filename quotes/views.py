@@ -4,13 +4,18 @@ from django.core.paginator import Paginator
 from .models import Quote
 from .forms import QuoteForm
 import random
+import logging
 
+logger = logging.getLogger(__name__)
 
 def home(request):
     """Page d'accueil avec une citation aléatoire."""
     quotes = Quote.objects.all()
     random_quote = random.choice(quotes) if quotes.exists() else None
     
+    logger.info("Ma vue a été appelée")
+    logger.debug("Données reçues : %s", request.GET.dict())
+
     context = {
         'random_quote': random_quote,
         'total_quotes': quotes.count()

@@ -123,3 +123,73 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+LOG_DIR = BASE_DIR / "logs"
+LOG_DIR.mkdir(exist_ok=True)  # crée le dossier logs si besoin
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+
+    "formatters": {
+        "verbose": {
+            "format": "[{levelname}] {asctime} {name} "
+                      "(pid={process}) {filename}:{lineno} - {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "[{levelname}] {message}",
+            "style": "{",
+        },
+    },
+
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+        "quotes_file": {  # handler spécifique pour ton appli
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": LOG_DIR / "quotes.log",
+            "maxBytes": 5 * 1024 * 1024,  # 5 Mo
+            "backupCount": 5,
+            "encoding": "utf-8",
+            "formatter": "verbose",
+            "level": "INFO",
+        },
+        # Exemple : logs des erreurs Django (500, 403, etc.)
+        "django_errors_file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": LOG_DIR / "django_errors.log",
+            "maxBytes": 5 * 1024 * 1024,
+            "backupCount": 5,
+            "encoding": "utf-8",
+            "formatter": "verbose",
+            "level": "WARNING",
+        },
+    },
+
+    "loggers": {
+        # Logger pour ton application "quotes"
+        "quotes": {
+            "handlers": ["console", "quotes_file"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+
+        # Logger des erreurs Django (utile pour 403/500, etc.)
+        "django.request": {
+            "handlers": ["django_errors_file", "console"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+
+        # par défaut, Django
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": True,
+        },
+    },
+}
